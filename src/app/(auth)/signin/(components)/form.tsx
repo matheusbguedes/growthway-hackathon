@@ -73,10 +73,10 @@ export default function Form() {
           <div className="flex-1 h-px bg-border" />
         </div>
         <Button
+          size="xl"
           type="button"
           variant="outline"
-          size="lg"
-          className="w-full h-11 rounded-xl text-sm font-medium border-border text-foreground hover:bg-muted gap-2.5"
+          className="font-medium bg-white border-border text-foreground hover:bg-muted gap-2.5"
           onClick={() => signIn("google", { callbackUrl })}
         >
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none">

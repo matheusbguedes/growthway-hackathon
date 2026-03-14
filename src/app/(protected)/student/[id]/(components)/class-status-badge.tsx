@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { ClassStatus } from "@/types/class";
+import type { StudentClass } from "@/types/student";
 import type { ElementType } from "react";
 import {
   CheckCircle2,
@@ -11,31 +11,33 @@ import {
   XCircle,
 } from "lucide-react";
 
+type ClassStatus = StudentClass["status"];
+
 const statusConfig: Record<
   ClassStatus,
   { label: string; icon: ElementType; className: string }
 > = {
-  pending: {
+  PENDING: {
     label: "Pendente",
     icon: Clock,
     className: "bg-zinc-100 text-zinc-600 border-zinc-200",
   },
-  progress: {
+  IN_PROGRESS: {
     label: "Em andamento",
     icon: Loader2,
     className: "bg-blue-50 text-blue-600 border-blue-200",
   },
-  canceled: {
+  CANCELLED: {
     label: "Cancelada",
     icon: XCircle,
     className: "bg-red-50 text-red-500 border-red-200",
   },
-  validation: {
-    label: "Aguardando validação",
+  IN_REVIEW: {
+    label: "Em revisão",
     icon: ShieldCheck,
     className: "bg-amber-50 text-amber-600 border-amber-200",
   },
-  concluded: {
+  COMPLETED: {
     label: "Concluída",
     icon: CheckCircle2,
     className: "bg-green-50 text-green-600 border-green-200",
@@ -59,7 +61,7 @@ export function ClassStatusBadge({ status, className }: ClassStatusBadgeProps) {
         className
       )}
     >
-      <Icon className={cn("size-3", status === "progress" && "animate-spin")} />
+      <Icon className={cn("size-3", status === "IN_PROGRESS" && "animate-spin")} />
       {config.label}
     </span>
   );

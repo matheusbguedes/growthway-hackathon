@@ -1,17 +1,17 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Class } from "@/types/class";
-import { CheckSquare2 } from "lucide-react";
+import type { StudentClass } from "@/types/student";
+import { CheckSquare2, ExternalLink } from "lucide-react";
 import { ClassStatusBadge } from "./class-status-badge";
 
 interface ClassCardProps {
-  classItem: Class;
-  onClick: (classItem: Class) => void;
+  classItem: StudentClass;
+  onClick: (classItem: StudentClass) => void;
 }
 
 function formatCardDate(dateStr: string): string {
-  const date = new Date(dateStr + "T00:00:00");
+  const date = new Date(dateStr);
   return date
     .toLocaleDateString("pt-BR", {
       day: "2-digit",
@@ -22,12 +22,12 @@ function formatCardDate(dateStr: string): string {
     .replace(".", "");
 }
 
-const STATUS_LEFT_BORDER: Record<Class["status"], string> = {
-  pending: "border-l-zinc-300",
-  progress: "border-l-blue-400",
-  canceled: "border-l-red-400",
-  validation: "border-l-amber-400",
-  concluded: "border-l-primary",
+const STATUS_LEFT_BORDER: Record<StudentClass["status"], string> = {
+  PENDING: "border-l-zinc-300",
+  IN_PROGRESS: "border-l-blue-400",
+  CANCELLED: "border-l-red-400",
+  IN_REVIEW: "border-l-amber-400",
+  COMPLETED: "border-l-primary",
 };
 
 export function ClassCard({ classItem, onClick }: ClassCardProps) {
@@ -48,29 +48,31 @@ export function ClassCard({ classItem, onClick }: ClassCardProps) {
         <ClassStatusBadge status={classItem.status} />
       </div>
 
-      <p className="text-sm font-semibold text-foreground mb-1.5">
-        {classItem.title}
-      </p>
+      <div className="flex items-start justify-between gap-2 mb-1.5">
+        <p className="text-sm font-semibold text-foreground">
+          {classItem.title}
+        </p>
+        {classItem.url && (
+          <ExternalLink className="size-3.5 text-muted-foreground shrink-0" />
+        )}
+      </div>
 
-      <p className="text-xs text-muted-foreground line-clamp-2 mb-3">
-        {classItem.description}
-      </p>
+      {classItem.description && (
+        <p className="text-xs text-muted-foreground line-clamp-2 mb-3">
+          {classItem.description}
+        </p>
+      )}
 
       <div className="flex flex-wrap items-center gap-1.5">
-        {classItem.tags.map((tag) => (
-          <span
-            key={tag.id}
-            className="rounded-md border border-border bg-muted px-2 py-0.5 text-xs text-muted-foreground"
-          >
-            {tag.name}
-          </span>
-        ))}
-        {classItem.has_task && (
+        {classItem.goal && (
           <span className="inline-flex items-center gap-1 rounded-md border border-primary/30 bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+            🎯 {classItem.goal.title}
+          </span>
+        )}
+        {classItem.notes && (
+          <span className="inline-flex items-center gap-1 rounded-md border border-border bg-muted px-2 py-0.5 text-xs text-muted-foreground">
             <CheckSquare2 className="size-3" />
-            {classItem.task_description
-              ? `Tarefa: ${classItem.task_description.slice(0, 24)}${classItem.task_description.length > 24 ? "…" : ""}`
-              : "Com atividade"}
+            Com observações
           </span>
         )}
       </div>

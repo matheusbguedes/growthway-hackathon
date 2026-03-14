@@ -15,7 +15,7 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { LogOutIcon } from "lucide-react";
+import { LogOutIcon, SettingsIcon, User2Icon } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -25,6 +25,10 @@ const routes = [
     {
         label: "Dashboard",
         href: "/dashboard",
+    },
+    {
+        label: "Agenda",
+        href: "/agenda",
     }
 ]
 
@@ -36,15 +40,19 @@ export function Header() {
             <Link href="#" className="flex items-center no-underline">
                 <Image src="/logo.png" alt="Logo" width={176} height={176} className="w-24 object-contain" />
             </Link>
-            <nav className="flex items-center gap-8">
+            <nav className="flex items-center gap-1">
                 {routes.map((route) => {
                     const isActive = pathname === route.href;
                     return (
                         <Link
                             key={route.href}
                             href={route.href}
-                            className={cn("text-sm font-medium text-foreground", isActive && "text-primary")}>
+                            className={cn("relative px-4 py-2 text-sm rounded-md transition-allduration-300", isActive ? "text-primary font-medium hover:bg-none cursor-default" : "text-muted-foreground hover:bg-primary/10 hover:text-primary/80")}
+                        >
                             {route.label}
+                            {isActive && (
+                                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-11/12 rounded-full bg-primary" />
+                            )}
                         </Link>
                     )
                 })}
@@ -70,7 +78,12 @@ export function Header() {
                     <DropdownMenuGroup>
                         <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
                         <DropdownMenuItem>
+                            <User2Icon />
                             Perfil
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <SettingsIcon />
+                            Configurações
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
