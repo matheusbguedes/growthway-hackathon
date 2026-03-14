@@ -4,8 +4,10 @@ import { getClasses } from "@/app/api/class/get-classes";
 import {
     Dialog,
     DialogContent,
+    DialogTitle,
     DialogTrigger
 } from "@/components/animate-ui/radix/dialog";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { Class } from "@/types/class";
@@ -23,8 +25,10 @@ import {
     startOfWeek,
 } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { ChevronLeftIcon, ChevronRightIcon, Circle } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, Circle, ExternalLink } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { StatusBadge } from "./status-badge";
 
 export default function Calendar() {
     const { data: classes = [], isLoading } = useQuery({
@@ -32,6 +36,8 @@ export default function Calendar() {
         queryFn: getClasses,
         refetchOnWindowFocus: true,
     });
+
+    const router = useRouter();
 
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [baseDate, setBaseDate] = useState(new Date());
@@ -148,12 +154,57 @@ export default function Calendar() {
                                     )}
                                 </div>
                             </DialogTrigger>
-                            <DialogContent>
+                            <DialogContent className="max-w-xl">
+                                <DialogTitle className="text-sm text-muted-foreground">Cronograma do dia {format(day!, "dd/MM/yyyy")}</DialogTitle>
+                                <div className="w-full flex flex-col gap-3 mt-1">
+                                    {dayClasses.map(({ id, title, description, date, status, url, student }: Class) => (
+                                        <div
+                                            key={id}
+                                            onClick={() => router.push(`/classes/${id}`)}
+                                            className="w-full bg-card border border-border rounded-xl p-4 cursor-pointer hover:border-border/60 hover:shadow-sm hover:scale-105 transition-all duration-300"
+                                        >
+                                            <div className="flex items-start justify-between gap-2 mb-1.5">
+                                                <span className="text-sm font-medium text-foreground leading-snug flex-1">
+                                                    {title}
+                                                </span>
+                                                <StatusBadge status={status} />
+                                            </div>
+                                            {description && (
+                                                <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed mb-3">
+                                                    {description}
+                                                </p>
+                                            )}
+                                            <div className="flex items-center justify-between gap-2 pt-3 border-t border-border/40">
+                                                <div className="flex items-center gap-2 min-w-0">
+                                                    <Avatar>
+                                                        <AvatarFallback className="text-xs">
+                                                            {student?.name?.charAt(0)}
+                                                        </AvatarFallback>
+                                                    </Avatar>
+                                                    <span className="text-xs text-muted-foreground truncate">{student?.name}</span>
+                                                    <span className="text-xs text-muted-foreground/50">
+                                                        {format(new Date(date), "dd/MM 'às' HH:mm")}
+                                                    </span>
+                                                </div>
+                                                <div className="flex gap-1.5 shrink-0" onClick={(e) => e.stopPropagation()}>
+                                                    {url && (
+                                                        <Button
+                                                            size="sm"
+                                                            onClick={() => window.open(url, "_blank")}
+                                                        >
+                                                            Entrar <ExternalLink className="size-4" />
+                                                        </Button>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                             </DialogContent>
                         </Dialog>
                     );
                 })}
             </div>
-        </div>
+        </div >
     );
 }

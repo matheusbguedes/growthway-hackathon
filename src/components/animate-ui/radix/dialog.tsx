@@ -149,8 +149,7 @@ function DialogContent({
               }}
               transition={transition}
               className={cn(
-                "absolute left-[50%] top-[50%] z-50 grid max-h-fit w-[calc(100%-2rem)] max-w-md translate-x-[-50%] translate-y-[-50%] gap-4 rounded-xl border bg-background p-6 shadow-lg",
-                "absolute inset-0 m-auto",
+                "fixed left-[50%] top-[50%] z-50 grid max-h-[90vh] w-[calc(100%-2rem)] max-w-md translate-x-[-50%] translate-y-[-50%] gap-4 overflow-y-auto rounded-xl border bg-background p-6 shadow-lg",
                 className
               )}
               {...props}
