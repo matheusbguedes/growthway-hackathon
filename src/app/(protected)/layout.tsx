@@ -1,4 +1,4 @@
-import { Header } from "@/components/headers";
+import { Header } from "@/components/header";
 
 export default function ProtectedLayout({
   children,
@@ -6,7 +6,7 @@ export default function ProtectedLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main>
+    <main className="min-h-screen">
       <Header />
       {children}
     </main>

@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { QueryClientProvider } from "@/providers/query-client-provider";
 import { UserProvider } from "@/providers/user-provider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -20,7 +21,9 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={cn(inter.className, "antialiased")}>
         <UserProvider>
-          {children}
+          <QueryClientProvider>
+            {children}
+          </QueryClientProvider>
         </UserProvider>
       </body>
     </html>

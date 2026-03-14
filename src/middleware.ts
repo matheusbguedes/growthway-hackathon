@@ -3,11 +3,11 @@ import { NextResponse } from "next/server";
 
 export default withAuth(
   function middleware(req) {
-    // const token = req.nextauth.token;
-    // const pathname = req.nextUrl.pathname;
+    const token = req.nextauth.token;
+    const pathname = req.nextUrl.pathname;
 
-    // if (token && pathname === "/")
-    //   return NextResponse.redirect(new URL("/dashboard", req.url));
+    if (token && pathname === "/")
+      return NextResponse.redirect(new URL("/dashboard", req.url));
 
     return NextResponse.next();
   },

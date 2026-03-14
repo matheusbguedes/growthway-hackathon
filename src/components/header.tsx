@@ -14,24 +14,40 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 import { LogOutIcon } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const routes = [
+    {
+        label: "Dashboard",
+        href: "/dashboard",
+    }
+]
 
 export function Header() {
     const { data: session } = useSession();
+    const pathname = usePathname();
     return (
-        <header className="flex items-center justify-between px-8 h-16 bg-white border-b border-gray-100">
+        <header className="flex items-center justify-between px-8 h-16">
             <Link href="#" className="flex items-center gap-2.5 no-underline">
                 GROWTHWAY
             </Link>
             <nav className="flex items-center gap-8">
-                <Link href="#" className="text-sm font-medium text-gray-900">Dashboard</Link>
-                <Link href="#" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">Projetos</Link>
-                <Link href="#" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">Relatórios</Link>
-                <Link href="#" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">Configurações</Link>
+                {routes.map((route) => {
+                    const isActive = pathname === route.href;
+                    return (
+                        <Link
+                            key={route.href}
+                            href={route.href}
+                            className={cn("text-sm font-medium text-gray-900", isActive && "border-b-2 border-primary")}>
+                            {route.label}
+                        </Link>
+                    )
+                })}
             </nav>
-
             <DropdownMenu>
                 <DropdownMenuTrigger>
                     <div className="flex items-center gap-2.5 cursor-pointer">
@@ -57,7 +73,7 @@ export function Header() {
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem variant="destructive">
+                    <DropdownMenuItem variant="destructive" onClick={() => signOut()}>
                         <LogOutIcon />
                         Sair
                     </DropdownMenuItem>

@@ -1,19 +1,16 @@
-"use client";
-
-import { Button } from "@/components/ui/button";
-import { GithubIcon } from "lucide-react";
-import { signIn } from "next-auth/react";
+import { Suspense } from "react";
+import Form from "./(components)/form";
+import FormSkeleton from "./(components)/form-skeleton";
 
 export default function SignIn() {
-  const handleSignIn = async () => {
-    await signIn("github", { callbackUrl: "/" });
-  };
-
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <Button variant="outline" className="cursor-pointer" onClick={handleSignIn}>
-        Entrar com GitHub <GithubIcon className="size-4" />
-      </Button>
+    <div className="flex w-full h-svh bg-background">
+      <div className="w-2/3 hidden lg:block bg-linear-to-b from-blue-50 to-blue-100" />
+      <div className="w-full lg:w-1/3 flex justify-center items-center p-3 md:p-10">
+        <Suspense fallback={<FormSkeleton />}>
+          <Form />
+        </Suspense>
+      </div>
     </div>
   );
 }
