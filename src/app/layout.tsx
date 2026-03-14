@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={cn(inter.className, "antialiased")}>
+      <body className={cn(inter.className, "antialiased bg-background")}>
         <UserProvider>
           <QueryClientProvider>
             {children}

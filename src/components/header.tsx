@@ -17,6 +17,7 @@ import {
 import { cn } from "@/lib/utils";
 import { LogOutIcon } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -32,8 +33,8 @@ export function Header() {
     const pathname = usePathname();
     return (
         <header className="flex items-center justify-between px-8 h-16">
-            <Link href="#" className="flex items-center gap-2.5 no-underline">
-                GROWTHWAY
+            <Link href="#" className="flex items-center no-underline">
+                <Image src="/logo.png" alt="Logo" width={176} height={176} className="w-24 object-contain" />
             </Link>
             <nav className="flex items-center gap-8">
                 {routes.map((route) => {
@@ -42,7 +43,7 @@ export function Header() {
                         <Link
                             key={route.href}
                             href={route.href}
-                            className={cn("text-sm font-medium text-gray-900", isActive && "border-b-2 border-primary")}>
+                            className={cn("text-sm font-medium text-foreground", isActive && "text-primary")}>
                             {route.label}
                         </Link>
                     )
@@ -52,8 +53,8 @@ export function Header() {
                 <DropdownMenuTrigger>
                     <div className="flex items-center gap-2.5 cursor-pointer">
                         <div className="flex flex-col text-right">
-                            <span className="text-sm font-medium text-gray-900 leading-tight">{session?.user?.name}</span>
-                            <span className="text-xs text-gray-400 leading-tight">{session?.user?.email}</span>
+                            <span className="text-sm font-medium text-foreground leading-tight">{session?.user?.name}</span>
+                            <span className="text-xs text-muted-foreground leading-tight">{session?.user?.email}</span>
                         </div>
                         <Avatar className="size-10">
                             <AvatarImage
