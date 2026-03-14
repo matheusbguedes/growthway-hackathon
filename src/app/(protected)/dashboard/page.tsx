@@ -5,7 +5,7 @@ import { Card } from "./(components)/card";
 
 export default function Dashboard() {
   return (
-    <div className="container mx-auto px-6 py-6 md:px-8 space-y-5 border border-border rounded-lg">
+    <div className="container mx-auto px-6 py-6 md:px-8 space-y-5 border border-border rounded-xl">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <Card
           icon={Users}

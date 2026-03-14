@@ -27,8 +27,8 @@ const routes = [
         href: "/dashboard",
     },
     {
-        label: "Alunos",
-        href: "/students",
+        label: "Agenda",
+        href: "/agenda",
     }
 ]
 
