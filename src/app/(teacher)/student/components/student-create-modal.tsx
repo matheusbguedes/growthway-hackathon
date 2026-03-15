@@ -1,6 +1,6 @@
 "use client";
 
-import { createStudent } from "@/app/api/students/create-student";
+import { createStudent } from "@/app/api/student/create-student";
 import {
   Dialog,
   DialogContent,

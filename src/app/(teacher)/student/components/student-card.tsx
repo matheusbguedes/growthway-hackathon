@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Mail, MoreHorizontal, Phone, Pencil, Trash2 } from "lucide-react";
+import { Mail, MoreHorizontal, Pencil, Phone, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { StudentDeleteDialog } from "./student-delete-modal";
@@ -60,7 +60,7 @@ export function StudentCard({ student }: StudentCardProps) {
         onOpenChange={setDeleteOpen}
       />
 
-      <div className="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
+      <div className="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md" onClick={() => router.push(`/student/${student.id}`)}>
         {/* Header */}
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
@@ -82,7 +82,7 @@ export function StudentCard({ student }: StudentCardProps) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem
-                onClick={() => router.push(`/student/${student.id}/edit`)}
+                onClick={() => router.push(`/student/${student.id}`)}
               >
                 <Pencil className="mr-2 size-4" />
                 Editar

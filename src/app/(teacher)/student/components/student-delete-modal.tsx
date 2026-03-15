@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteStudent } from "@/app/api/students/delete-student";
+import { deleteStudent } from "@/app/api/student/delete-student";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { Student } from "./student-card";
