@@ -2,16 +2,16 @@
 
 import { getStudent } from "@/app/api/student/get-student";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { StudentClass } from "@/types/student";
 import { useQuery } from "@tanstack/react-query";
-import { BookOpen, Calendar, CheckSquare2, ChevronRight, Music2, Plus, Target } from "lucide-react";
+import { BookOpen, Calendar, CheckSquare2, ChevronRight, Music2, Target } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { ClassCard } from "./(components)/class-card";
 import { ClassDetailModal } from "./(components)/class-detail-modal";
+import { ScheduleClassModal } from "./(components)/schedule-class-modal";
 
 type DiaryFilter = "all" | "goal";
 
@@ -31,34 +31,29 @@ export default function StudentProfile() {
     setModalOpen(true);
   };
 
-  // Calcular iniciais do nome
   const initials = useMemo(() => {
     if (!student?.name) return "?";
     return student.name
       .split(" ")
-      .map((n) => n[0])
+      .map((n: string) => n[0])
       .join("")
       .toUpperCase()
       .slice(0, 2);
   }, [student]);
 
-  // Agregar todas as aulas (com e sem meta)
   const allClasses = useMemo(() => {
     if (!student?.classes_grouped) return [];
-
-    const withGoal = student.classes_grouped.with_goal.flatMap((group) => group.classes);
+    const withGoal = student.classes_grouped.with_goal.flatMap((group: any) => group.classes);
     const withoutGoal = student.classes_grouped.without_goal;
-
     return [...withGoal, ...withoutGoal].sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      (a: StudentClass, b: StudentClass) =>
+        new Date(b.date).getTime() - new Date(a.date).getTime()
     );
   }, [student]);
 
-  // Calcular estatísticas
   const stats = useMemo(() => {
     const total = allClasses.length;
-    const completed = allClasses.filter((c) => c.status === "COMPLETED").length;
-
+    const completed = allClasses.filter((c: StudentClass) => c.status === "COMPLETED").length;
     return {
       total_classes: total,
       concluded_classes: completed,
@@ -66,26 +61,17 @@ export default function StudentProfile() {
     };
   }, [allClasses]);
 
-  // Pegar a primeira meta (se houver)
   const goal = useMemo(() => {
     const firstGoalGroup = student?.classes_grouped?.with_goal?.[0];
     if (!firstGoalGroup) return null;
-
     const totalClasses = firstGoalGroup.classes.length;
-    const completedClasses = firstGoalGroup.classes.filter((c) => c.status === "COMPLETED").length;
+    const completedClasses = firstGoalGroup.classes.filter((c: StudentClass) => c.status === "COMPLETED").length;
     const progress = totalClasses > 0 ? Math.round((completedClasses / totalClasses) * 100) : 0;
-
-    return {
-      ...firstGoalGroup.goal,
-      progress,
-    };
+    return { ...firstGoalGroup.goal, progress };
   }, [student]);
 
-  // Filtrar aulas com base no filtro selecionado
   const filteredClasses = useMemo(() => {
-    if (diaryFilter === "goal") {
-      return allClasses.filter((c) => c.goal_id !== null);
-    }
+    if (diaryFilter === "goal") return allClasses.filter((c: StudentClass) => c.goal_id !== null);
     return allClasses;
   }, [diaryFilter, allClasses]);
 
@@ -111,7 +97,7 @@ export default function StudentProfile() {
         <span className="text-foreground font-medium">{student.name}</span>
       </nav>
 
-      {/* Header do aluno */}
+      {/* Header */}
       <div className="rounded-xl border border-border bg-card p-6 flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-4">
           <Avatar className="size-20 rounded-xl">
@@ -121,9 +107,7 @@ export default function StudentProfile() {
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-col gap-1.5">
-            <h1 className="text-2xl font-bold text-foreground">
-              {student.name}
-            </h1>
+            <h1 className="text-2xl font-bold text-foreground">{student.name}</h1>
             <div className="flex items-center gap-3 text-sm text-muted-foreground flex-wrap">
               {student.discipline && (
                 <span className="flex items-center gap-1.5">
@@ -146,19 +130,16 @@ export default function StudentProfile() {
             </div>
           </div>
         </div>
-        <Button size="lg" className="gap-2 shrink-0">
-          <Plus className="size-4" />
-          Registrar aula
-        </Button>
+
+        {/* Botão agendar aula */}
+        <ScheduleClassModal studentId={id} />
       </div>
 
-      {/* Cards de estatísticas */}
+      {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="rounded-xl border border-border bg-card p-5 flex items-center justify-between">
           <div>
-            <p className="text-sm text-muted-foreground mb-1">
-              Aulas realizadas
-            </p>
+            <p className="text-sm text-muted-foreground mb-1">Aulas realizadas</p>
             <p className="text-3xl font-bold text-foreground">
               {stats.concluded_classes}
               <span className="text-base font-normal text-muted-foreground ml-1.5">
@@ -173,9 +154,7 @@ export default function StudentProfile() {
 
         <div className="rounded-xl border border-border bg-card p-5 flex items-center justify-between">
           <div>
-            <p className="text-sm text-muted-foreground mb-1">
-              Taxa de conclusão
-            </p>
+            <p className="text-sm text-muted-foreground mb-1">Taxa de conclusão</p>
             <p className="text-3xl font-bold text-foreground">
               {stats.task_completion_rate}
               <span className="text-base font-normal text-muted-foreground ml-0.5">%</span>
@@ -189,15 +168,10 @@ export default function StudentProfile() {
 
       {/* Grid principal */}
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6 items-start">
-        {/* Coluna esquerda - Diário de aulas */}
+        {/* Diário de aulas */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-foreground">
-              Diário de aulas
-            </h2>
-          </div>
+          <h2 className="text-lg font-semibold text-foreground">Diário de aulas</h2>
 
-          {/* Filtros */}
           <div className="flex items-center gap-1 bg-muted rounded-xl p-1 w-fit">
             {[
               { key: "all" as const, label: "Todas as aulas" },
@@ -218,7 +192,6 @@ export default function StudentProfile() {
             ))}
           </div>
 
-          {/* Lista de aulas */}
           <div className="flex flex-col gap-3">
             {filteredClasses.length === 0 ? (
               <div className="rounded-xl border border-dashed border-border py-12 text-center">
@@ -229,7 +202,7 @@ export default function StudentProfile() {
                 </p>
               </div>
             ) : (
-              filteredClasses.map((classItem) => (
+              filteredClasses.map((classItem: StudentClass) => (
                 <ClassCard
                   key={classItem.id}
                   classItem={classItem}
@@ -240,20 +213,15 @@ export default function StudentProfile() {
           </div>
         </div>
 
-        {/* Coluna direita - Meta e próxima aula */}
+        {/* Meta atual */}
         <div className="space-y-4">
-          {/* Card de meta */}
           {goal && (
             <div className="rounded-xl border border-border bg-card p-5">
               <div className="flex items-center gap-2 mb-3">
                 <Target className="size-4 text-primary" />
-                <span className="text-sm font-semibold text-foreground">
-                  Meta atual
-                </span>
+                <span className="text-sm font-semibold text-foreground">Meta atual</span>
               </div>
-              <p className="text-sm font-semibold text-foreground mb-1">
-                {goal.title}
-              </p>
+              <p className="text-sm font-semibold text-foreground mb-1">{goal.title}</p>
               <p className="text-xs text-muted-foreground leading-relaxed mb-4">
                 {goal.description}
               </p>
@@ -262,9 +230,7 @@ export default function StudentProfile() {
                   <span className="text-muted-foreground uppercase tracking-wide font-medium">
                     Progresso
                   </span>
-                  <span className="font-semibold text-primary">
-                    {goal.progress}%
-                  </span>
+                  <span className="font-semibold text-primary">{goal.progress}%</span>
                 </div>
                 <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
                   <div
@@ -278,9 +244,10 @@ export default function StudentProfile() {
         </div>
       </div>
 
-      {/* Modal de detalhes da aula */}
+      {/* Modal de detalhes */}
       <ClassDetailModal
         classItem={selectedClass}
+        studentId={id}
         open={modalOpen}
         onOpenChange={setModalOpen}
       />
