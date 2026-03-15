@@ -37,6 +37,11 @@ const routes = [
     label: "Agenda",
     href: "/agenda",
     icon: CalendarDays,
+  },
+  {
+    label: "Alunos",
+    href: "/students",
+    icon: User2,
   }
 ];
 
