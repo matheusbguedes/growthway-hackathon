@@ -2,6 +2,7 @@ export interface Student {
   id: string;
   name: string;
   email: string;
+<<<<<<< HEAD
   phone: string | null;
   document?: string | null;
   status: "ACTIVE" | "INACTIVE" | "PAUSED";
@@ -9,6 +10,10 @@ export interface Student {
   level?: string;
   avatar_url?: string;
   started_at?: string;
+=======
+  phone: string;
+  status: "ACTIVE" | "INACTIVE" | "PAUSED";
+>>>>>>> main
   created_at: string;
   updated_at: string;
   user_id: string;
