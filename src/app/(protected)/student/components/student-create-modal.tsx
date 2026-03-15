@@ -22,7 +22,7 @@ import { z } from "zod";
 
 const schema = z.object({
   name: z.string().min(1, "Nome é obrigatório"),
-  email: z.string().email("Email inválido").optional().or(z.literal("")),
+  email: z.email("Email inválido"),
   phone: z.string().optional(),
   document: z.string().optional(),
   status: z.enum(["ACTIVE", "INACTIVE", "PAUSED"]),
@@ -119,11 +119,10 @@ export function StudentCreateModal() {
                     key={opt.value}
                     type="button"
                     onClick={() => setStatus(opt.value)}
-                    className={`rounded-full px-3 py-1 text-xs font-medium transition-all border-2 ${
-                      status === opt.value
-                        ? `${opt.color} border-current scale-105 shadow-sm`
-                        : "bg-zinc-50 text-zinc-400 border-transparent hover:bg-zinc-100"
-                    }`}
+                    className={`rounded-full px-3 py-1 text-xs font-medium transition-all border-2 ${status === opt.value
+                      ? `${opt.color} border-current scale-105 shadow-sm`
+                      : "bg-zinc-50 text-zinc-400 border-transparent hover:bg-zinc-100"
+                      }`}
                   >
                     {opt.label}
                   </button>
