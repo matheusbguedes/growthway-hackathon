@@ -9,7 +9,6 @@ export default function Dashboard() {
   const { data: dashboard, isLoading } = useQuery({
     queryKey: ["dashboard"],
     queryFn: getDashboard,
-    refetchOnWindowFocus: true,
   });
 
   return (
