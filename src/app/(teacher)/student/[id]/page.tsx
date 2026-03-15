@@ -2,16 +2,16 @@
 
 import { getStudent } from "@/app/api/student/get-student";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { NumberTicker } from "@/components/ui/number-ticker";
 import { cn } from "@/lib/utils";
 import type { StudentClass } from "@/types/student";
 import { useQuery } from "@tanstack/react-query";
-import { BookOpen, Calendar, CheckSquare2, ChevronRight, Clock, Music2, Plus, Star, Target } from "lucide-react";
+import { BookOpen, Calendar, CheckSquare2, ChevronRight, Clock, Music2, Star, Target } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { ClassDetailModal } from "./(components)/class-detail-modal";
 import { ClassPlanModal } from "./(components)/class-plan-modal";
+import { ScheduleClassModal } from "./(components)/schedule-class-modal";
 
 type DiaryFilter = "all" | "goal";
 
@@ -46,7 +46,6 @@ const statusConfig = {
 export default function StudentProfile() {
   const { id } = useParams<{ id: string }>();
   const [diaryFilter, setDiaryFilter] = useState<DiaryFilter>("all");
-  const [expandedClass, setExpandedClass] = useState<string | null>(null);
   const [selectedClass, setSelectedClass] = useState<StudentClass | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -93,6 +92,11 @@ export default function StudentProfile() {
     return allClasses;
   }, [diaryFilter, allClasses]);
 
+  const handleClassClick = (classItem: StudentClass) => {
+    setSelectedClass(classItem);
+    setModalOpen(true);
+  };
+
   if (isLoading || !student) {
     return (
       <div className="w-full min-h-screen bg-background">
@@ -114,6 +118,8 @@ export default function StudentProfile() {
   return (
     <div className="w-full min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 md:px-8 max-w-6xl space-y-6">
+
+        {/* Header */}
         <div className="relative overflow-hidden rounded-2xl border border-border bg-card">
           <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-transparent pointer-events-none" />
           <div className="absolute -top-16 -right-16 size-48 rounded-full bg-primary/5 blur-3xl pointer-events-none" />
@@ -150,16 +156,16 @@ export default function StudentProfile() {
                 </div>
               </div>
             </div>
+
+            {/* Botões de ação */}
             <div className="flex items-center gap-2">
-              <Button size="lg" className="gap-2 shrink-0">
-                <Plus className="size-4" />
-                Registrar aula
-              </Button>
+              <ScheduleClassModal studentId={id} />
               <ClassPlanModal />
             </div>
           </div>
         </div>
 
+        {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="group relative overflow-hidden rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/30 hover:shadow-md hover:shadow-primary/5">
             <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
@@ -200,6 +206,7 @@ export default function StudentProfile() {
           </div>
         </div>
 
+        {/* Grid principal */}
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_288px] gap-6 items-start">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
@@ -247,7 +254,6 @@ export default function StudentProfile() {
                     dot: "bg-muted-foreground",
                     badge: "bg-muted text-muted-foreground border-border",
                   };
-                  const isExpanded = expandedClass === classItem.id;
                   const formattedDate = new Date(classItem.date).toLocaleDateString("pt-BR", {
                     day: "2-digit",
                     month: "short",
@@ -257,16 +263,10 @@ export default function StudentProfile() {
                   return (
                     <button
                       key={classItem.id}
-                      onClick={() => {
-                        setExpandedClass(isExpanded ? null : classItem.id);
-                        setSelectedClass(classItem);
-                      }}
+                      onClick={() => handleClassClick(classItem)}
                       className={cn(
                         "group w-full text-left rounded-xl border bg-card p-4 transition-all duration-200",
-                        "hover:shadow-md hover:shadow-black/5 hover:-translate-y-px",
-                        isExpanded
-                          ? "border-primary/30 shadow-sm shadow-primary/5"
-                          : "border-border hover:border-border/80"
+                        "hover:shadow-md hover:shadow-black/5 hover:-translate-y-px hover:border-primary/30"
                       )}
                     >
                       <div className="flex items-center gap-3">
@@ -295,18 +295,8 @@ export default function StudentProfile() {
                             </span>
                           </div>
                         </div>
-                        <ChevronRight
-                          className={cn(
-                            "size-4 text-muted-foreground shrink-0 transition-transform duration-200",
-                            isExpanded && "rotate-90"
-                          )}
-                        />
+                        <ChevronRight className="size-4 text-muted-foreground shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" />
                       </div>
-                      {isExpanded && classItem.description && (
-                        <div className="mt-3 ml-5 pl-3 border-l-2 border-primary/20">
-                          <p className="text-sm text-muted-foreground leading-relaxed">{classItem.description}</p>
-                        </div>
-                      )}
                     </button>
                   );
                 })
@@ -314,6 +304,7 @@ export default function StudentProfile() {
             </div>
           </div>
 
+          {/* Sidebar */}
           <div className="space-y-4 lg:sticky lg:top-6">
             {goal && (
               <div className="relative overflow-hidden rounded-2xl border border-border bg-card p-5">
@@ -332,13 +323,11 @@ export default function StudentProfile() {
                     <p className="text-sm font-bold text-foreground leading-snug mb-1">{goal.title}</p>
                     <p className="text-xs text-muted-foreground leading-relaxed">{goal.description}</p>
                   </div>
-                  <div className="space-y-1.5">
-                    <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
-                      <div
-                        className="h-full rounded-full bg-primary transition-all duration-700"
-                        style={{ width: `${goal.progress}%` }}
-                      />
-                    </div>
+                  <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
+                    <div
+                      className="h-full rounded-full bg-primary transition-all duration-700"
+                      style={{ width: `${goal.progress}%` }}
+                    />
                   </div>
                 </div>
               </div>
@@ -373,8 +362,11 @@ export default function StudentProfile() {
           </div>
         </div>
       </div>
+
+      {/* Modal de detalhes da aula */}
       <ClassDetailModal
         classItem={selectedClass}
+        studentId={id}
         open={modalOpen}
         onOpenChange={setModalOpen}
       />

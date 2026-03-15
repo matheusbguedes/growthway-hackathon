@@ -102,8 +102,7 @@ export function ScheduleClassModal({ studentId }: ScheduleClassModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="inline-flex items-center gap-2 rounded-xl bg-green-500 px-4 h-9 text-sm font-semibold text-white shadow-sm transition-all hover:bg-green-600 hover:shadow-md active:scale-95">
-        <Plus className="size-4" />
+      <DialogTrigger className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 h-9 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 active:scale-95">        <Plus className="size-4" />
         Agendar aula
       </DialogTrigger>
       <DialogContent>
