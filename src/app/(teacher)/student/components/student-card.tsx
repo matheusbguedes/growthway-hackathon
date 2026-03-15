@@ -82,7 +82,7 @@ export function StudentCard({ student }: StudentCardProps) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem
-                onClick={() => router.push(`/student/${student.id}/edit`)}
+                onClick={() => router.push(`/student/${student.id}`)}
               >
                 <Pencil className="mr-2 size-4" />
                 Editar
