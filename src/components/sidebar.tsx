@@ -49,7 +49,7 @@ export function Sidebar() {
   const { data: session } = useSession();
   const pathname = usePathname();
   return (
-    <aside className="flex h-screen w-56 flex-col border-r border-border bg-white">
+    <aside className="fixed left-0 flex h-screen w-56 flex-col border-r border-border bg-white">
       <div className="flex h-16 shrink-0 items-center px-4">
         <Link href="/" className="w-full flex items-center">
           <Image src="/logo.png" alt="Logo" width={176} height={176} className="w-28 object-contain" />

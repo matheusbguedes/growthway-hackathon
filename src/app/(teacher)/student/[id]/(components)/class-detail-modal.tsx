@@ -1,8 +1,8 @@
 "use client";
 
 import { createTask } from "@/app/api/class/create-task";
-import { deleteTask } from "@/app/api/class/delete-task";
 import { deleteClass } from "@/app/api/class/delete-class";
+import { deleteTask } from "@/app/api/class/delete-task";
 import { getClassTask } from "@/app/api/class/get-class-task";
 import { updateTask } from "@/app/api/class/update-task";
 import {

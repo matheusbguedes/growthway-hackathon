@@ -4,20 +4,20 @@ import { updateClass } from "@/app/api/class/update-class";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
-  DialogDescription,
 } from "@/components/animate-ui/radix/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import type { StudentClass } from "@/types/student";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import { z } from "zod";
-import type { StudentClass } from "@/types/student";
 
 const schema = z.object({
   title: z.string().optional(),
@@ -137,11 +137,10 @@ export function EditClassModal({
                   key={opt.value}
                   type="button"
                   onClick={() => setStatus(opt.value)}
-                  className={`rounded-full px-3 py-1 text-xs font-medium transition-all border-2 ${
-                    status === opt.value
+                  className={`rounded-full px-3 py-1 text-xs font-medium transition-all border-2 ${status === opt.value
                       ? `${opt.color} border-current scale-105 shadow-sm`
                       : "bg-zinc-50 text-zinc-400 border-transparent hover:bg-zinc-100"
-                  }`}
+                    }`}
                 >
                   {opt.label}
                 </button>

@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/utils";
 import type { StudentClass } from "@/types/student";
-import type { ElementType } from "react";
 import {
   CheckCircle2,
   Clock,
@@ -10,6 +9,7 @@ import {
   ShieldCheck,
   XCircle,
 } from "lucide-react";
+import type { ElementType } from "react";
 
 type ClassStatus = StudentClass["status"];
 
@@ -56,7 +56,7 @@ export function ClassStatusBadge({ status, className }: ClassStatusBadgeProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium",
+        "w-fit inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium",
         config.className,
         className
       )}
