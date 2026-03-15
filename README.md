@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Letiva
 
-## Getting Started
+Frontend da plataforma **Letiva**, um SaaS criado para **professores autônomos**.
 
-First, run the development server:
+O projeto foi desenvolvido durante o **Hackathon da GrowthWay 2026**.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+A plataforma resolve um problema comum de professores particulares que precisam administrar histórico de aulas, tarefas, progresso por metas, organização de agenda e acompanhamento pedagógico.
+
+Tudo isso normalmente é feito com **planilhas, WhatsApp e memória**, o que gera desorganização e perda de alunos.  
+O Letiva centraliza todo esse fluxo em um único sistema.
+
+---
+
+# 🚀 Começando
+
+Estas instruções permitem executar o frontend do Letiva localmente para desenvolvimento.
+
+---
+
+# 📋 Pré-requisitos
+
+Antes de iniciar, você precisa ter instalado:
+
+```
+Node.js
+NPM
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# 🔧 Instalação
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Clone o repositório e siga os passos abaixo.
 
-## Learn More
+### 1. Instalar dependências
 
-To learn more about Next.js, take a look at the following resources:
+```
+npm install
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 2. Configurar variáveis de ambiente
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Renomeie o arquivo de exemplo:
 
-## Deploy on Vercel
+```
+.env.example
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+para:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+.env.local
+```
+
+Depois preencha as variáveis necessárias com as configurações do seu ambiente, incluindo as URLs da API e as configurações do **NextAuth**.
+
+---
+
+### 3. Iniciar a aplicação
+
+```
+npm run dev
+```
+
+A aplicação estará disponível em:
+
+```
+[http://localhost:3000](http://localhost:3000)
+```
+
+---
+
+# 🛠️ Construído com
+
+- [Next.js](https://nextjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [NextAuth](https://next-auth.js.org/)
+- [Zod](https://zod.dev/)
+- [Shadcn UI](https://ui.shadcn.com/)
+- [Tailwind CSS](https://tailwindcss.com/)
+
+---
+
+# 📦 Arquitetura
+
+O frontend foi construído utilizando **Next.js com App Router**, com foco em tipagem forte, validação consistente e componentes reutilizáveis.
+
+---
+
+# 👥 Time
+
+Projeto desenvolvido durante o hackathon por:
+
+- **João Victor Silva de Oliveira**
+- **Deivid Moura Vieira**
+- **Matheus Borges Guedes**
+- **Tiago Tavares Contador**
